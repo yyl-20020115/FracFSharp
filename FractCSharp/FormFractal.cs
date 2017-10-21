@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Numerics;
 using System.Windows.Forms;
 
@@ -9,9 +10,9 @@ namespace FractCSharp
         public const int MaxIterations = 50;
         public const double ScalingFactor = 1.0 / 200.0;
 
-        public static Complex MapPlane(int x, int y)
+        public static Complex MapPlane(int x, int y,int w,int h)
         {
-            return new Complex(x * ScalingFactor - 2.0, y * ScalingFactor - 1.0);
+            return new Complex(x /(double)w*3.0- 2.0, y / (double)h*2.2 - 1.0);
         }
 
         public static Color[] Colors =
@@ -40,16 +41,20 @@ namespace FractCSharp
                 {
                     int iteration = 0;
 
-                    Complex current = MapPlane(x, y), temp = current;
+                    Complex current = MapPlane(x, y,width,height), t = current;
                     
-                    while(temp.Magnitude<=2.0 && iteration < MaxIterations)
+                    while(t.Magnitude<=2.0 && iteration < MaxIterations)
                     {
-                        temp = temp * temp + current;
+                        t = t * t + current;
 
                         iteration++;
                     }
                     {
-                        double ratio =1.0 -  (double)iteration / (double)MaxIterations;
+                        double mag = t.Magnitude > 2.0 ? 2.0 : t.Magnitude;
+
+                        double ratio = mag / 2.0; 
+                            
+                           // (double)iteration / (double)MaxIterations;
                         Color rc = Color.FromArgb((int)(255 * ratio), (int)(255 * ratio), (int)(255 * ratio));
                         bitmap.SetPixel(x, y, rc);
                     }
@@ -64,6 +69,11 @@ namespace FractCSharp
         {
             e.Graphics.DrawImage(BuildMandelbrotImage(this.Width, this.Height), 0, 0);
             base.OnPaint(e);
+        }
+
+        private void FormFractal_Load(object sender, System.EventArgs e)
+        {
+
         }
     }
 }

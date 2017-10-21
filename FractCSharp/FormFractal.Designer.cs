@@ -35,8 +35,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(733, 445);
+            this.DoubleBuffered = true;
             this.Name = "FormFractal";
             this.Text = "Drawing Mandelbrot Set";
+            this.Load += new System.EventHandler(this.FormFractal_Load);
             this.ResumeLayout(false);
 
         }
